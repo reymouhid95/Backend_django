@@ -74,6 +74,7 @@ class User(AbstractBaseUser):
 class Sondage(models.Model):
     question = models.TextField()
     options = models.JSONField(default=list)
+    
 
     def add_option(self, option_text):
         self.options.append(option_text)

@@ -8,7 +8,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from account.models import Sondage  
 from account.serializers import SondageSerializer 
-from rest_framework import generics
+from rest_framework import generics, permissions
+from account.models import User
+
+
 
 
 
@@ -83,17 +86,21 @@ class UserPasswordResetView(APIView):
 #     queryset = Sondage.objects.all()
 #     serializer_class = SondageSerializer
 
+class CanViewSondagePermission(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.user.is_admin:
+            return True
+        return obj.created_by == request.user
+
 class SondageListCreateView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]  
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Sondage.objects.all()
     serializer_class = SondageSerializer
 
     def perform_create(self, serializer):
-     serializer.save()
-
-
+        serializer.save()
 
 class SondageDetailView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated]  
+    permission_classes = [permissions.IsAuthenticated, CanViewSondagePermission]
     queryset = Sondage.objects.all()
     serializer_class = SondageSerializer
