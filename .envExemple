@@ -1,7 +1,0 @@
-DB_NAME = "sondages"
-DB_USER = "postgres"
-DB_PASSWORD = "Rey290598"
-
-EMAIL_USER = "thiernooury89@gmail.com"
-EMAIL_PASSWORD = "egroezbkxqborwuz"
-EMAIL_FROM = "thiernooury89@gmail.com"

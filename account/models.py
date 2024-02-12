@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
-
 class UserManager(BaseUserManager):
     def create_user(self, email, name, tc, password=None, password2=None):
         """
@@ -12,8 +11,8 @@ class UserManager(BaseUserManager):
 
         user = self.model(
             email=self.normalize_email(email),
-            name = name,
-            tc = tc,
+            name=name,
+            tc=tc,
         )
 
         user.set_password(password)
@@ -27,13 +26,12 @@ class UserManager(BaseUserManager):
         user = self.create_user(
             email,
             password=password,
-            name = name,
-            tc = tc,
+            name=name,
+            tc=tc,
         )
         user.is_admin = True
         user.save(using=self._db)
         return user
-
 
 class User(AbstractBaseUser):
     email = models.EmailField(
@@ -71,3 +69,12 @@ class User(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+# Med Bechir
+class Sondage(models.Model):
+    question = models.TextField()
+    options = models.JSONField(default=list)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_sondages')
+
+    def add_option(self, option_text):
+        self.options.append(option_text)
+        self.save()

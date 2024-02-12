@@ -6,6 +6,10 @@ from django.contrib.auth import authenticate
 from account.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
+from account.models import Sondage  
+from account.serializers import SondageSerializer 
+from rest_framework import generics
+
 
 
 # Generate Token Manually
@@ -72,3 +76,23 @@ class UserPasswordResetView(APIView):
                 if serializer.is_valid(raise_exception=True):
                         return Response({'msg':'Password Reset Successfully'}, status=status.HTTP_200_OK)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+        # Med Bechir
+# class SondageOptionListCreateView(generics.ListCreateAPIView):
+#     queryset = Sondage.objects.all()
+#     serializer_class = SondageSerializer
+
+class SondageListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]  
+    queryset = Sondage.objects.all()
+    serializer_class = SondageSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user)
+
+
+class SondageDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]  
+    queryset = Sondage.objects.all()
+    serializer_class = SondageSerializer

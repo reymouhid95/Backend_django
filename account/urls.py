@@ -1,5 +1,7 @@
 from django.urls import path, include
 from account.views import UserRegistrationView, UserLoginView, UserProfileView, UserChangePasswordView, SendPasswordResetEmailView, UserPasswordResetView
+from account.views import SondageListCreateView, SondageDetailView  
+
 
 urlpatterns = [
         path('register/', UserRegistrationView.as_view(), name='register'),
@@ -8,4 +10,6 @@ urlpatterns = [
         path('changepassword/', UserChangePasswordView.as_view(), name='changepassword'),
         path('send-reset-password-email/', SendPasswordResetEmailView.as_view(), name='send-reset-password-email'),
         path('reset-password/<uid>/<token>/', UserPasswordResetView.as_view(), name='reset-password'),
+        path('sondages/', SondageListCreateView.as_view(), name='creation-de-sondage'), 
+        path('sondages/<int:pk>/', SondageDetailView.as_view(), name='sondage-detail'),
 ]
