@@ -69,11 +69,11 @@ class User(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+    
 # Med Bechir
 class Sondage(models.Model):
     question = models.TextField()
     options = models.JSONField(default=list)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_sondages')
 
     def add_option(self, option_text):
         self.options.append(option_text)

@@ -89,7 +89,8 @@ class SondageListCreateView(generics.ListCreateAPIView):
     serializer_class = SondageSerializer
 
     def perform_create(self, serializer):
-        serializer.save(creator=self.request.user)
+     serializer.save()
+
 
 
 class SondageDetailView(generics.RetrieveUpdateDestroyAPIView):
