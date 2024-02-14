@@ -83,16 +83,7 @@ WSGI_APPLICATION = 'sondages.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'surver-back',
-#         'USER': 'postgres',
-#         'PASSWORD': 'Moh@med9394@',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     },
-# }
+
 
 DATABASES = {
     "default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
@@ -181,5 +172,6 @@ PASSWORD_RESET_TIMEOUT=900
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "http://localhost:5173"
+    "http://localhost:5173",
+    "https://survey-project-rho.vercel.app/",
 ]
