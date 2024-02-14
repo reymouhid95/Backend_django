@@ -6,10 +6,11 @@ from django.contrib.auth import authenticate
 from account.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
-from account.models import Sondage  
-from account.serializers import SondageSerializer 
+from account.models import Sondage, Answer  
+from account.serializers import SondageSerializer, AnswerSerializer 
 from rest_framework import generics, permissions
 from account.models import User
+
 
 
 
@@ -86,14 +87,8 @@ class UserPasswordResetView(APIView):
 #     queryset = Sondage.objects.all()
 #     serializer_class = SondageSerializer
 
-class CanViewSondagePermission(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if request.user.is_admin:
-            return True
-        return obj.created_by == request.user
-
 class SondageListCreateView(generics.ListCreateAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+#     permission_classes = [IsAuthenticated]
     queryset = Sondage.objects.all()
     serializer_class = SondageSerializer
 
@@ -101,6 +96,42 @@ class SondageListCreateView(generics.ListCreateAPIView):
         serializer.save()
 
 class SondageDetailView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [permissions.IsAuthenticated, CanViewSondagePermission]
+#     permission_classes = [IsAuthenticated]
     queryset = Sondage.objects.all()
     serializer_class = SondageSerializer
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        sondage_id = self.kwargs.get('pk')
+        answers = Answer.objects.filter(sondage=sondage_id)
+        answer_serializer = AnswerSerializer(answers, many=True)
+        response.data['answers'] = answer_serializer.data
+        return response
+
+class AnswerCreateView(generics.CreateAPIView):
+#     permission_classes = [IsAuthenticated]
+    queryset = Answer.objects.all()
+    serializer_class = AnswerSerializer
+
+    def perform_create(self, serializer):
+        sondage_id = self.request.data.get('sondage_id')
+        serializer.save(sondage_id=sondage_id, user=None)
+        
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.views import APIView
+from account.models import Answer
+from account.serializers import AnswerSerializer
+
+class SondageResultsView(APIView):
+#     permission_classes = [IsAuthenticated]
+    def get(self, request, pk, format=None):
+        answers = Answer.objects.filter(sondage=pk)
+        answer_serializer = AnswerSerializer(answers, many=True)
+
+        response_data = {
+            'sondage_id': pk,
+            'answers': answer_serializer.data,
+        }
+        
+        return Response(response_data, status=status.HTTP_200_OK)

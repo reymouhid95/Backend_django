@@ -1,16 +1,38 @@
 from rest_framework import serializers
 from account.models import User
-from account.models import Sondage
+from account.models import Sondage, Answer
 from django.utils.encoding import smart_str, force_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from account.utils import Util
 
+
 # Med Bechir
+class AnswerSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    sondage_id = serializers.IntegerField(write_only=True)
+
+    class Meta:
+        model = Answer
+        fields = ['user', 'choix', 'created_at', 'sondage_id']
+
+    def validate_choix(self, value):
+        sondage_id = self.initial_data.get('sondage_id')
+        sondage = Sondage.objects.get(pk=sondage_id)
+        valid_options = sondage.options
+
+        if value not in valid_options:
+            raise serializers.ValidationError(f"{value} n'est pas une option valide pour ce sondage.")
+
+        return value
+
+
 class SondageSerializer(serializers.ModelSerializer):
+    answers = AnswerSerializer(many=True, required=False) 
+
     class Meta:
         model = Sondage
-        fields = '__all__'
+        fields = ['id', 'question', 'options', 'answers']
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
