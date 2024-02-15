@@ -39,6 +39,27 @@ class UserLoginView(APIView):
                                 return Response({'token':token, 'msg':'Login Success'}, status=status.HTTP_200_OK)
                         else:
                                 return Response({'errors':{'non_field_errors':['Email or Password is not Valid']}}, status=status.HTTP_404_NOT_FOUND)
+                        
+
+# Logout 
+
+class UserLogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        refresh_token = request.data.get('refresh_token')
+
+        if not refresh_token:
+            return Response({'error': 'Refresh token is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+        except Exception as e:
+            return Response({'error': 'Invalid refresh token.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({'message': 'Logout successful'}, status=status.HTTP_200_OK)
+
 
 class UserProfileView(APIView):
         renderer_classes = [UserRenderer]
