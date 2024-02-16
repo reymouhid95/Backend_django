@@ -14,7 +14,7 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Answer
-        fields = ['user', 'choix', 'created_at', 'sondage_id']
+        fields = ['choix', 'created_at', 'sondage_id']
 
     def validate_choix(self, value):
         sondage_id = self.initial_data.get('sondage_id')
@@ -32,7 +32,7 @@ class SondageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sondage
-        fields = ['id', 'question', 'options', 'answers']
+        fields = ['id', 'question', 'options', 'answers', 'owner']
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):

@@ -88,15 +88,15 @@ class UserPasswordResetView(APIView):
 #     serializer_class = SondageSerializer
 
 class SondageListCreateView(generics.ListCreateAPIView):
-#     permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     queryset = Sondage.objects.all()
     serializer_class = SondageSerializer
 
     def perform_create(self, serializer):
-        serializer.save()
+        serializer.save(owner=self.request.user)
 
 class SondageDetailView(generics.RetrieveUpdateDestroyAPIView):
-#     permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     queryset = Sondage.objects.all()
     serializer_class = SondageSerializer
 
@@ -109,7 +109,7 @@ class SondageDetailView(generics.RetrieveUpdateDestroyAPIView):
         return response
 
 class AnswerCreateView(generics.CreateAPIView):
-#     permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
 
@@ -124,7 +124,7 @@ from account.models import Answer
 from account.serializers import AnswerSerializer
 
 class SondageResultsView(APIView):
-#     permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     def get(self, request, pk, format=None):
         answers = Answer.objects.filter(sondage=pk)
         answer_serializer = AnswerSerializer(answers, many=True)

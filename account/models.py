@@ -74,6 +74,7 @@ class User(AbstractBaseUser):
 class Sondage(models.Model):
     question = models.TextField()
     options = models.JSONField(default=list)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=1)  
 
     def add_option(self, option_text):
         self.options.append(option_text)
@@ -83,7 +84,7 @@ class Sondage(models.Model):
         return f"Sondage: {self.question}"
 
 class Answer(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     sondage = models.ForeignKey(Sondage, on_delete=models.CASCADE, related_name='answers')
     choix = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
