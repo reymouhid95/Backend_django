@@ -9,7 +9,7 @@ from account.utils import Util
 
 # Med Bechir
 class AnswerSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+#     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     sondage_id = serializers.IntegerField(write_only=True)
 
     class Meta:
