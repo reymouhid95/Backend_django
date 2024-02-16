@@ -74,7 +74,7 @@ class User(AbstractBaseUser):
 class Sondage(models.Model):
     question = models.TextField()
     options = models.JSONField(default=list)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=1)  
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sondages')
 
     def add_option(self, option_text):
         self.options.append(option_text)
