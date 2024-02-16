@@ -52,7 +52,7 @@ class UserLoginView(APIView):
                     'token': token,
                     'user_id': user.id,
                     'email': user.email,
-                    'username': user.username,
+                    'username': user.name,
                     'msg': 'Login Success',
                 }
 
