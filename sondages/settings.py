@@ -175,4 +175,5 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://survey-project-rho.vercel.app",
     "https://testing-pulso-deployment.vercel.app/",
+    "https://survey-project-tau.vercel.app/",
 ]
