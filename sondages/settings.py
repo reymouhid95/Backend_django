@@ -89,6 +89,18 @@ DATABASES = {
     "default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
 } 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'surver-back',
+#         'USER': 'postgres',
+#         'PASSWORD': 'Moh@med9394@',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     },
+# }
+
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -174,6 +186,6 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:5173",
     "https://survey-project-rho.vercel.app",
-    "https://testing-pulso-deployment.vercel.app/",
-    "https://survey-project-tau.vercel.app/",
+    "https://testing-pulso-deployment.vercel.app",
+    "https://survey-project-tau.vercel.app",
 ]

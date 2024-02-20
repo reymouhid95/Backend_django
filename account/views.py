@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from account.serializers import UserRegistrationSerializer, UserLoginSerializer, UserProfileSerializer, UserChangePasswordSerializer, SendPasswordResetEmailSerializer, UserPasswordResetSerializer
+from account.serializers import UserRegistrationSerializer, UserLoginSerializer, UserProfileSerializer, UserChangePasswordSerializer, SendPasswordResetEmailSerializer, UserPasswordResetSerializer, SimpleSondageSerializer
 from django.contrib.auth import authenticate
 from account.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -10,10 +10,6 @@ from account.models import Sondage, Answer
 from account.serializers import SondageSerializer, AnswerSerializer 
 from rest_framework import generics, permissions
 from account.models import User
-
-
-
-
 
 
 # Generate Token Manually
@@ -96,6 +92,25 @@ class UserPasswordResetView(APIView):
                         return Response({'msg':'Password Reset Successfully'}, status=status.HTTP_200_OK)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+# Renouveler le token
+class RefreshTokenView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        try:
+            refresh_token = request.data.get('refresh_token')
+
+            if not refresh_token:
+                return Response({'error': 'Refresh token is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            token = RefreshToken(refresh_token)
+            new_access_token = str(token.access_token)
+
+            return Response({'access_token': new_access_token}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'error': 'Invalid refresh token.'}, status=status.HTTP_400_BAD_REQUEST)
+        
         
         # Med Bechir
 # class SondageOptionListCreateView(generics.ListCreateAPIView):
@@ -103,15 +118,16 @@ class UserPasswordResetView(APIView):
 #     serializer_class = SondageSerializer
 
 class SondageListCreateView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
     queryset = Sondage.objects.all()
     serializer_class = SondageSerializer
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        sondage = serializer.save(owner=self.request.user)
+        survey_url = sondage.get_survey_url()
+        return Response({'survey_url': survey_url})
 
 class SondageDetailView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated]
+#     permission_classes = [IsAuthenticated]
     queryset = Sondage.objects.all()
     serializer_class = SondageSerializer
 
@@ -123,20 +139,30 @@ class SondageDetailView(generics.RetrieveUpdateDestroyAPIView):
         response.data['answers'] = answer_serializer.data
         return response
 
+
+class SondageDetailSimpleView(generics.RetrieveAPIView):
+    # permission_classes = [IsAuthenticated]
+    queryset = Sondage.objects.all()
+    serializer_class = SimpleSondageSerializer
+    lookup_field = 'slug'
+
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+
 class AnswerCreateView(generics.CreateAPIView):
-    permission_classes = [IsAuthenticated]
+#     permission_classes = [IsAuthenticated]
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
 
     def perform_create(self, serializer):
         sondage_id = self.request.data.get('sondage_id')
-        serializer.save(sondage_id=sondage_id, user=None)
+        serializer.save(sondage_id=sondage_id)
+
+
         
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.views import APIView
-from account.models import Answer
-from account.serializers import AnswerSerializer
 
 class SondageResultsView(APIView):
     permission_classes = [IsAuthenticated]
