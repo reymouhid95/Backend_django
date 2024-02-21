@@ -9,8 +9,8 @@ from account.utils import Util
 
 # Med Bechir
 class AnswerSerializer(serializers.ModelSerializer):
-#     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     sondage_id = serializers.IntegerField(write_only=True)
+
 
     class Meta:
         model = Answer
@@ -21,7 +21,7 @@ class AnswerSerializer(serializers.ModelSerializer):
         sondage = Sondage.objects.get(pk=sondage_id)
         valid_options = sondage.options
 
-        if value not in valid_options:
+        if value not in valid_options:  
             raise serializers.ValidationError(f"{value} n'est pas une option valide pour ce sondage.")
 
         return value
@@ -29,10 +29,17 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 class SondageSerializer(serializers.ModelSerializer):
     answers = AnswerSerializer(many=True, required=False) 
+    slug = serializers.SlugField(read_only=True)  
+
 
     class Meta:
         model = Sondage
-        fields = ['id', 'question', 'options', 'answers', 'owner']
+        fields = ['id', 'question', 'options', 'answers', 'owner', 'slug']
+        
+class SimpleSondageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sondage
+        fields = ['id', 'question', 'options']
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
