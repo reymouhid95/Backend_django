@@ -188,4 +188,5 @@ CORS_ALLOWED_ORIGINS = [
     "https://survey-project-rho.vercel.app",
     "https://testing-pulso-deployment.vercel.app",
     "https://survey-project-tau.vercel.app",
+    "https://test-vercel-deploy-pearl.vercel.app"
 ]

@@ -127,7 +127,7 @@ class SondageListCreateView(generics.ListCreateAPIView):
         return Response({'survey_url': survey_url})
 
 class SondageDetailView(generics.RetrieveUpdateDestroyAPIView):
-#     permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     queryset = Sondage.objects.all()
     serializer_class = SondageSerializer
 
@@ -153,7 +153,7 @@ class SondageDetailSimpleView(generics.RetrieveAPIView):
 
 
 class AnswerCreateView(generics.CreateAPIView):
-#     permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
 
@@ -165,7 +165,7 @@ class AnswerCreateView(generics.CreateAPIView):
         
 
 class SondageResultsView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     def get(self, request, pk, format=None):
         answers = Answer.objects.filter(sondage=pk)
         answer_serializer = AnswerSerializer(answers, many=True)
