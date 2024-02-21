@@ -89,17 +89,6 @@ DATABASES = {
     "default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
 } 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'surver-back',
-#         'USER': 'postgres',
-#         'PASSWORD': 'Moh@med9394@',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     },
-# }
-
 
 
 REST_FRAMEWORK = {
