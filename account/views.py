@@ -118,6 +118,7 @@ class RefreshTokenView(APIView):
 #     serializer_class = SondageSerializer
 
 class SondageListCreateView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Sondage.objects.all()
     serializer_class = SondageSerializer
 
