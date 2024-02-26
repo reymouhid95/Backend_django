@@ -10,6 +10,7 @@ from account.models import Sondage, Answer
 from account.serializers import SondageSerializer, AnswerSerializer 
 from rest_framework import generics, permissions
 from account.models import User
+from django.contrib.auth.models import User
 
 
 # Generate Token Manually
