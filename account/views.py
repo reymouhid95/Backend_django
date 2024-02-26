@@ -57,6 +57,16 @@ class UserLoginView(APIView):
                 return Response({'errors': {'non_field_errors': ['Email or Password is not Valid']}}, status=status.HTTP_404_NOT_FOUND)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+class CheckEmailExistsView(APIView):
+    def post(self, request, format=None):
+        email = request.data.get('email', None)
+        if email is None:
+            return Response({'error': 'Email is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user_exists = User.objects.filter(email=email).exists()
+        return Response({'exists': user_exists}, status=status.HTTP_200_OK)
 
 
 class UserProfileView(APIView):

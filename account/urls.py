@@ -1,10 +1,11 @@
 from django.urls import path, include
-from account.views import UserRegistrationView, UserLoginView, UserProfileView, UserChangePasswordView, SendPasswordResetEmailView, UserPasswordResetView
+from account.views import UserRegistrationView, UserLoginView, UserProfileView, UserChangePasswordView, SendPasswordResetEmailView, UserPasswordResetView, CheckEmailExistsView
 from account.views import SondageListCreateView, SondageDetailView, AnswerCreateView, SondageResultsView, SondageDetailSimpleView, RefreshTokenView  
 
 
 urlpatterns = [
         path('register/', UserRegistrationView.as_view(), name='register'),
+        path('check-email/', CheckEmailExistsView.as_view(), name='check_email_exists'),
         path('login/', UserLoginView.as_view(), name='login'),
         path('profile/', UserProfileView.as_view(), name='profile'),
         path('changepassword/', UserChangePasswordView.as_view(), name='changepassword'),
