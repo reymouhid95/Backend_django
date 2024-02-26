@@ -10,8 +10,7 @@ from account.models import Sondage, Answer
 from account.serializers import SondageSerializer, AnswerSerializer 
 from rest_framework import generics, permissions
 from account.models import User
-from django.contrib.auth.models import User
-
+from django.contrib.auth import get_user_model
 
 # Generate Token Manually
 def get_tokens_for_user(user):
@@ -61,13 +60,16 @@ class UserLoginView(APIView):
     
     
 class CheckEmailExistsView(APIView):
-    def post(self, request, format=None):
+    def post(self, request, *args, **kwargs):
         email = request.data.get('email', None)
-        if email is None:
-            return Response({'error': 'Email is required.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        user_exists = User.objects.filter(email=email).exists()
-        return Response({'exists': user_exists}, status=status.HTTP_200_OK)
+        if email:
+            user_model = get_user_model()
+            if user_model.objects.filter(email=email).exists():
+                return Response({'exists': True}, status=status.HTTP_200_OK)
+            else:
+                return Response({'exists': False}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Email not provided'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserProfileView(APIView):
