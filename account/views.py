@@ -108,6 +108,7 @@ class UserPasswordResetView(APIView):
         
 # Renouveler le token
 class RefreshTokenView(TokenRefreshView):
+    permission_classes = [IsAuthenticated]
     pass
 
 
