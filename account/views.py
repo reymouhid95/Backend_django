@@ -13,6 +13,9 @@ from account.models import User
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.exceptions import InvalidToken
+from rest_framework_simplejwt.tokens import TokenError
+
 
 # Generate Token Manually
 def get_tokens_for_user(user):
@@ -110,9 +113,16 @@ class UserPasswordResetView(APIView):
 # Renouveler le token
 class RefreshTokenView(TokenRefreshView):
     permission_classes = [AllowAny]
-    # permission_classes = [IsAuthenticated]
-    pass
 
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
 # class SondageOptionListCreateView(generics.ListCreateAPIView):
