@@ -12,6 +12,7 @@ from rest_framework import generics, permissions
 from account.models import User
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.views import TokenRefreshView
+from rest_framework.permissions import AllowAny
 
 # Generate Token Manually
 def get_tokens_for_user(user):
@@ -108,6 +109,7 @@ class UserPasswordResetView(APIView):
         
 # Renouveler le token
 class RefreshTokenView(TokenRefreshView):
+    permission_classes = [AllowAny]
     # permission_classes = [IsAuthenticated]
     pass
 
