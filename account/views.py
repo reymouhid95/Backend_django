@@ -108,25 +108,10 @@ class UserPasswordResetView(APIView):
         
 # Renouveler le token
 class RefreshTokenView(TokenRefreshView):
-    permission_classes = [IsAuthenticated]
+    pass
 
-    def post(self, request, format=None):
-        try:
-            refresh_token = request.data.get('refresh_token')
 
-            if not refresh_token:
-                return Response({'error': 'Refresh token is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
-            token = RefreshToken(refresh_token)
-            new_access_token = str(token.access_token)
-
-            return Response({'access_token': new_access_token}, status=status.HTTP_200_OK)
-
-        except Exception as e:
-            return Response({'error': 'Invalid refresh token.'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        
-        # Med Bechir
 # class SondageOptionListCreateView(generics.ListCreateAPIView):
 #     queryset = Sondage.objects.all()
 #     serializer_class = SondageSerializer
