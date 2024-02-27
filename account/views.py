@@ -11,6 +11,7 @@ from account.serializers import SondageSerializer, AnswerSerializer
 from rest_framework import generics, permissions
 from account.models import User
 from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.views import TokenRefreshView
 
 # Generate Token Manually
 def get_tokens_for_user(user):
@@ -106,7 +107,7 @@ class UserPasswordResetView(APIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 # Renouveler le token
-class RefreshTokenView(APIView):
+class RefreshTokenView(TokenRefreshView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
