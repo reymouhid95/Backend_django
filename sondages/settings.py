@@ -84,12 +84,9 @@ WSGI_APPLICATION = 'sondages.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 
-
 DATABASES = {
     "default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
 } 
-
-
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -201,4 +198,6 @@ CORS_ALLOWED_ORIGINS = [
     "https://survey-project-seven.vercel.app",
     "https://survey-project-sigma.vercel.app",
     "https://backup-pulso.vercel.app",
+    "https://pulso-psi.vercel.app",
+    "https://pulso-nine.vercel.app",
 ]
