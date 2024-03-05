@@ -41,7 +41,6 @@ class UserLoginView(APIView):
                                 return Response({'errors':{'non_field_errors':['Email or Password is not Valid']}}, status=status.HTTP_404_NOT_FOUND)
                         
 
-# Logout 
 
 class UserLogoutView(APIView):
     permission_classes = [IsAuthenticated]
@@ -93,3 +92,9 @@ class UserPasswordResetView(APIView):
                 if serializer.is_valid(raise_exception=True):
                         return Response({'msg':'Password Reset Successfully'}, status=status.HTTP_200_OK)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        def profile(request):
+               if request.user.is_authenticated:
+                      return render('')
+               else:
+                      return redirect('./login')
